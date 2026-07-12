@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construction AI — Better Prompts, Better Workflows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,500&family=Onest:wght@400;500;600;700&family=Azeret+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0B0E;--bg-soft:#101218;--bg-soft-2:#13161D;
+  --ink:#F3F1EA;--ink-2:#BFC0BC;--ink-3:#8B8D90;--ink-4:#5E6166;
+  --rule:#1F2229;--rule-2:#2C2F38;
+  --accent:#E9A23B;--accent-rgb:233,162,59;
+  --good:#68C889;--bad:#E0604B;
+  --serif:'Source Serif 4',Georgia,serif;
+  --sans:'Onest',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'Azeret Mono',ui-monospace,SFMono-Regular,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.viewport{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;background:radial-gradient(120% 120% at 50% 120%,#0C0E13 0%,var(--bg) 60%)}
+.viewport:before{content:'';position:absolute;left:50%;bottom:-35%;width:90%;height:82%;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 100%,rgba(var(--accent-rgb),.16),transparent 72%);filter:blur(8px);transition:background .7s ease;pointer-events:none}
+.viewport:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:50;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.deck{width:1280px;height:720px;position:relative;transform-origin:center;z-index:1}
+.counter{position:absolute;top:44px;right:58px;font-family:var(--mono);font-size:13px;letter-spacing:.22em;color:var(--ink-4);z-index:5}.counter b{color:var(--ink-2);font-weight:500}
+.progress{position:absolute;left:0;bottom:0;width:100%;height:2px;background:var(--rule);z-index:5}.progress span{display:block;height:100%;width:12.5%;background:var(--accent);box-shadow:0 0 12px rgba(var(--accent-rgb),.8);transition:width .4s ease,background .4s ease}
+.chapnav{position:absolute;left:58px;top:50%;transform:translateY(-50%);width:178px;z-index:5}.chapnav:before{content:'';position:absolute;left:4px;top:3px;bottom:3px;width:1px;background:var(--rule)}
+.chapnav ol{list-style:none}.chapnav li{position:relative;display:flex;gap:12px;align-items:baseline;padding:9px 0 9px 24px;cursor:default}.chapnav li:before{content:'';position:absolute;left:1px;top:13px;width:7px;height:7px;border-radius:50%;border:1px solid var(--rule-2);background:var(--bg);transition:.35s ease}.chapnav li.active:before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(var(--accent-rgb),.85)}.chapnav li.done:before{background:var(--rule-2)}
+.chapnav .n{font-family:var(--mono);font-size:10px;color:var(--ink-4)}.chapnav .t{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7D7F84;line-height:1.2}.chapnav li.active .n,.chapnav li.active .t{color:var(--accent)}
+.slide{position:absolute;inset:0;padding:74px 76px 60px 274px;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}.slide.active{opacity:1;visibility:visible;transform:none}
+h1{font-family:var(--serif);font-size:76px;font-weight:500;line-height:.98;letter-spacing:-.022em}h1 em,h2 em{font-style:italic;color:var(--accent)}
+h2.title{font-family:var(--serif);font-size:56px;font-weight:500;line-height:1.04;letter-spacing:-.015em}.lead{font-size:21px;line-height:1.5;color:var(--ink-2);max-width:760px}.accent{color:var(--accent)}
+
+/* opener */
+.opening{display:grid;grid-template-columns:330px 1fr;gap:48px;align-items:center;margin-top:36px}.email-card{height:230px;border:1px solid var(--rule);border-radius:18px;background:var(--bg-soft);display:grid;place-items:center;position:relative}.email-card:after{content:'EMAIL CLEANUP';position:absolute;bottom:20px;font-family:var(--mono);font-size:11px;letter-spacing:.17em;color:var(--ink-4)}.email-card svg{width:92px;height:92px;fill:none;stroke:var(--ink-3);stroke-width:1.6}
+.open-arrow{position:absolute;left:608px;width:72px;height:22px}.workflow{height:230px;border:1px solid var(--accent);border-radius:18px;background:rgba(var(--accent-rgb),.05);display:flex;align-items:center;justify-content:center;gap:26px;box-shadow:0 0 42px rgba(var(--accent-rgb),.08)}.wf-node{width:112px;text-align:center}.wf-icon{width:78px;height:78px;margin:auto;border:1px solid rgba(var(--accent-rgb),.42);border-radius:50%;display:grid;place-items:center;background:rgba(var(--accent-rgb),.05)}.wf-icon svg{width:38px;height:38px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.wf-label{margin-top:13px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}.wf-link{width:42px;height:1px;background:var(--accent);opacity:.6}
+
+/* mistakes */
+.mistakes{margin-top:30px;max-width:870px}.mistake{display:grid;grid-template-columns:66px 220px 1fr;align-items:center;padding:22px 0;border-top:1px solid var(--rule)}.mistake:last-child{border-bottom:1px solid var(--rule)}.mn{font-family:var(--mono);font-size:15px;color:var(--accent)}.mword{font-family:var(--serif);font-size:31px;font-weight:500}.mwrong{font-size:19px;color:var(--ink-3);display:flex;align-items:center;gap:28px}.bad-choice{position:relative;display:inline-block}.bad-choice:after{content:'';position:absolute;left:-5px;right:-5px;top:52%;height:1px;background:var(--bad);transform:rotate(-7deg);transform-origin:center;box-shadow:0 0 5px rgba(224,96,75,.35)}.mright{color:var(--ink);font-weight:600}
+
+/* dictation */
+.dictation{display:grid;grid-template-columns:1fr 1.15fr;gap:28px;margin-top:32px}.dict-col{min-height:270px;border:1px solid var(--rule);border-radius:18px;padding:30px;background:var(--bg-soft);position:relative}.dict-col.spoken{border-color:var(--accent);background:rgba(var(--accent-rgb),.045);box-shadow:0 0 38px rgba(var(--accent-rgb),.08)}.dict-tag{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:24px}.spoken .dict-tag{color:var(--accent)}.typed-line{font-family:var(--serif);font-size:27px;line-height:1.35;color:var(--ink-2);max-width:315px}.speech{font-family:var(--serif);font-size:24px;line-height:1.35;color:var(--ink)}.frags{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.frag{font-family:var(--mono);font-size:12px;color:var(--accent);border:1px solid rgba(var(--accent-rgb),.34);border-radius:999px;padding:8px 12px;background:rgba(var(--accent-rgb),.05)}.mic{position:absolute;right:26px;top:22px;width:38px;height:38px}.mic svg{width:100%;height:100%;fill:none;stroke:var(--accent);stroke-width:1.9;stroke-linecap:round}
+
+/* WWH */
+.wwh{display:flex;flex-direction:column;gap:14px;margin-top:30px;max-width:870px}.wwh-row{display:flex;align-items:center;gap:26px;border:1px solid var(--rule);border-radius:15px;padding:18px 24px;background:var(--bg-soft);transition:opacity .35s ease,filter .35s ease,border-color .35s ease,box-shadow .35s ease}.wwh-row.is-dim{opacity:.24;filter:saturate(.55)}.wwh-row.is-active{opacity:1;border-color:var(--accent);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.26),0 0 34px rgba(var(--accent-rgb),.08)}.letter{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--accent);font-family:var(--serif);font-size:30px;color:var(--accent);background:rgba(var(--accent-rgb),.06);flex:none}.wword{font-family:var(--serif);font-size:30px;font-weight:500}.wdesc{font-size:18px;color:var(--ink-2);margin-top:2px}.wdesc b{color:var(--ink);font-weight:600}.wmuted{color:var(--ink-4);font-family:var(--mono);font-size:12px;margin-left:7px}
+
+/* construction applications */
+.apps{display:flex;align-items:center;gap:36px;margin-top:34px}.doc{width:330px;height:300px;border:1px solid var(--rule);border-radius:16px;background:var(--bg-soft);padding:28px;position:relative;overflow:hidden}.doc.lit{border-color:var(--accent);background:rgba(var(--accent-rgb),.045);box-shadow:0 0 38px rgba(var(--accent-rgb),.07)}.doc:after{content:'';position:absolute;right:-34px;top:-34px;width:88px;height:88px;border:1px solid var(--rule-2);transform:rotate(45deg)}.doc-label{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:30px}.doc-line{height:7px;background:var(--rule-2);border-radius:9px;margin:12px 0}.doc-line.wide{width:92%}.doc-line.mid{width:74%}.doc-line.short{width:54%}.doc-map{position:absolute;left:28px;right:28px;bottom:25px;display:flex;justify-content:space-between}.doc-map span{font-family:var(--mono);font-size:11px;color:var(--ink-3);border-top:1px solid var(--rule-2);padding-top:9px}.app-eq{font-family:var(--serif);font-size:42px;color:var(--ink-4)}
+
+/* prompt improver */
+.improve{display:grid;grid-template-columns:250px 120px 1fr;align-items:stretch;margin-top:38px}.base{border:1px solid var(--rule);border-radius:16px;background:var(--bg-soft);display:grid;place-items:center;text-align:center;padding:26px}.base .mini{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}.base .big{font-family:var(--serif);font-size:31px}.ai-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}.ai-arrow svg{width:78px;height:24px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round}.ai-arrow span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}.improved{border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:0 16px 16px 0;background:var(--bg-soft-2);padding:29px 32px;font-family:var(--mono);font-size:17px;line-height:1.75;color:var(--ink-2)}.improved .hl{color:var(--ink);background:rgba(var(--accent-rgb),.13);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.25);border-radius:4px;padding:1px 5px}.improved .var,.improved .last{color:var(--accent);font-weight:600}
+
+/* expert pipeline */
+.pipeline{display:grid;grid-template-columns:160px 52px 160px 52px 160px 52px 160px;align-items:center;margin-top:40px}.pipe-node{text-align:center}.pipe-icon{width:118px;height:118px;margin:auto;border:1px solid var(--rule-2);border-radius:50%;display:grid;place-items:center;background:var(--bg-soft)}.pipe-node.lit .pipe-icon{border-color:var(--accent);background:rgba(var(--accent-rgb),.05);box-shadow:0 0 32px rgba(var(--accent-rgb),.08)}.pipe-icon svg{width:54px;height:54px;fill:none;stroke:var(--ink-3);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.pipe-node.lit .pipe-icon svg{stroke:var(--accent)}.pipe-title{font-family:var(--serif);font-size:23px;margin-top:17px}.pipe-sub{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}.pipe-arrow svg{width:46px;height:20px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round}.knowledge-line{margin-top:34px;text-align:center;font-family:var(--serif);font-size:24px;font-style:italic;color:var(--ink-2)}.knowledge-line b{font-style:normal;color:var(--accent);font-weight:500}
+
+/* teaser */
+.constellation{position:relative;width:840px;height:350px;margin-top:22px}.core{position:absolute;left:354px;top:105px;width:132px;height:132px;border:1px solid var(--accent);border-radius:50%;display:grid;place-items:center;text-align:center;font-family:var(--serif);font-size:24px;color:var(--accent);background:rgba(var(--accent-rgb),.05);box-shadow:0 0 42px rgba(var(--accent-rgb),.10)}.star{position:absolute;display:flex;align-items:center;gap:14px;font-family:var(--serif);font-size:24px;color:var(--ink-2)}.star:before{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px rgba(var(--accent-rgb),.8)}.star.one{left:26px;top:42px}.star.two{right:12px;top:42px}.star.three{left:18px;bottom:40px}.star.four{right:28px;bottom:40px}.constellation svg{position:absolute;inset:0;width:100%;height:100%}.constellation line{stroke:var(--rule-2);stroke-width:1}
+
+@media (prefers-reduced-motion:reduce){.slide{transition:none}}
+</style>
+</head>
+<body>
+<div class="viewport" id="viewport">
+  <div class="deck" id="deck">
+    <div class="counter"><b id="cur">01</b> / <span id="tot">08</span></div>
+    <nav class="chapnav" aria-label="Sections"><ol id="navlist"></ol></nav>
+    <div class="progress"><span id="progress"></span></div>
+
+    <section class="slide" data-ch="1">
+      <h2 class="title">Better output starts<br>before you hit <em>send.</em></h2>
+      <div class="mistakes">
+        <div class="mistake"><div class="mn">01</div><div class="mword">Model</div><div class="mwrong"><span class="bad-choice">Default model</span><span class="mright">Right model for the job</span></div></div>
+        <div class="mistake"><div class="mn">02</div><div class="mword">Prompt</div><div class="mwrong"><span class="bad-choice">Vague request</span><span class="mright">What · Why · How</span></div></div>
+        <div class="mistake"><div class="mn">03</div><div class="mword">Input</div><div class="mwrong"><span class="bad-choice">Typing</span><span class="mright">Dictating context</span></div></div>
+      </div>
+    </section>
+
+    <section class="slide" data-ch="1">
+      <h2 class="title">Talk first. <em>Type second.</em></h2>
+      <div class="dictation">
+        <div class="dict-col">
+          <div class="dict-tag">What you'd type</div>
+          <div class="typed-line">“Draft an RFI about the ceiling conflict.”</div>
+        </div>
+        <div class="dict-col spoken">
+          <div class="dict-tag">What you'd say</div>
+          <div class="mic"><svg viewBox="0 0 48 48"><rect x="18" y="6" width="12" height="23" rx="6"/><path d="M11 24a13 13 0 0 0 26 0M24 37v6M17 43h14"/></svg></div>
+          <div class="speech">“Draft an RFI about the ceiling conflict…”</div>
+          <div class="frags"><span class="frag">…level three</span><span class="frag">…MEP drawing M-204</span><span class="frag">…schedule at risk</span><span class="frag">…need an answer Friday</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-ch="2" data-mode="spot" data-steps="2">
+      <h2 class="title">Give it the <em>What, Why, and How.</em></h2>
+      <div class="wwh">
+        <div class="wwh-row" data-i="0"><div class="letter">W</div><div><div class="wword">What</div><div class="wdesc">what you want it to <b>do and give you back</b></div></div></div>
+        <div class="wwh-row" data-i="1"><div class="letter">W</div><div><div class="wword">Why</div><div class="wdesc">the <b>intent</b><span class="wmuted">people often skip this</span></div></div></div>
+        <div class="wwh-row" data-i="2"><div class="letter">H</div><div><div class="wword">How</div><div class="wdesc">the <b>constraints, sources, and standard</b></div></div></div>
+      </div>
+    </section>
+
+    <section class="slide" data-ch="2">
+      <h2 class="title">Let AI <em>improve the prompt.</em></h2>
+      <div class="improve">
+        <div class="base"><div><div class="mini">WWH base prompt</div><div class="big">Your first draft</div></div></div>
+        <div class="ai-arrow"><svg viewBox="0 0 78 24"><path d="M2 12h68M61 5l9 7-9 7"/></svg><span>AI improves it</span></div>
+        <div class="improved">Look up <span class="hl">current best practices for prompting Opus 4.8</span> as of <span class="var">[today's date]</span>. Then rewrite my prompt in a <span class="hl">targeted way</span> — information-dense and no longer than it needs to be. Give me the <span class="last">improved prompt only.</span></div>
+      </div>
+    </section>
+
+    <section class="slide" data-ch="3">
+      <h2 class="title">Turn your best estimator into<br>a <em>reusable system.</em></h2>
+      <div class="pipeline">
+        <div class="pipe-node lit"><div class="pipe-icon"><svg viewBox="0 0 64 64"><circle cx="32" cy="21" r="10"/><path d="M14 56c2-15 9-22 18-22s16 7 18 22"/><path d="M48 13l7-5M50 20h9"/></svg></div><div class="pipe-title">Expert</div><div class="pipe-sub">best estimator</div></div>
+        <div class="pipe-arrow"><svg viewBox="0 0 46 20"><path d="M2 10h38M33 4l7 6-7 6"/></svg></div>
+        <div class="pipe-node"><div class="pipe-icon"><svg viewBox="0 0 64 64"><path d="M12 13h40v28H29L18 51V41h-6z"/><path d="M22 24h20M22 31h14"/></svg></div><div class="pipe-title">AI interview</div><div class="pipe-sub">one question at a time</div></div>
+        <div class="pipe-arrow"><svg viewBox="0 0 46 20"><path d="M2 10h38M33 4l7 6-7 6"/></svg></div>
+        <div class="pipe-node"><div class="pipe-icon"><svg viewBox="0 0 64 64"><path d="M17 7h22l10 10v40H17z"/><path d="M39 7v12h10M24 29h18M24 37h18M24 45h12"/></svg></div><div class="pipe-title">SOP</div><div class="pipe-sub">captured process</div></div>
+        <div class="pipe-arrow"><svg viewBox="0 0 46 20"><path d="M2 10h38M33 4l7 6-7 6"/></svg></div>
+        <div class="pipe-node lit"><div class="pipe-icon"><svg viewBox="0 0 64 64"><circle cx="22" cy="22" r="8"/><circle cx="43" cy="24" r="7"/><path d="M7 55c2-13 8-19 15-19s13 6 15 19M35 39c10-4 19 2 21 16"/></svg></div><div class="pipe-title">Team</div><div class="pipe-sub">skill or project</div></div>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+const ACCENTS={1:['#E9A23B','233,162,59'],2:['#A88CFF','168,140,255'],3:['#7FCB6B','127,203,107']};
+const CH_NAMES={1:'Better inputs',2:'Better prompts',3:'Knowledge transfer'};
+const slides=[...document.querySelectorAll('.slide')],total=slides.length,deck=document.getElementById('deck'),viewport=document.getElementById('viewport');
+document.getElementById('tot').textContent=String(total).padStart(2,'0');
+const navlist=document.getElementById('navlist'),first={};slides.forEach((s,i)=>{const c=+s.dataset.ch;if(first[c]===undefined)first[c]=i});
+Object.keys(CH_NAMES).forEach(k=>{const li=document.createElement('li');li.dataset.ch=k;li.innerHTML=`<span class="n">${String(k).padStart(2,'0')}</span><span class="t">${CH_NAMES[k]}</span>`;navlist.appendChild(li)});
+const navItems=[...navlist.children];let cur=0;
+function applySteps(slide){const state=+(slide.dataset.state||0);if(slide.dataset.mode==='spot'){slide.querySelectorAll('.wwh-row').forEach(row=>{const active=+row.dataset.i===state;row.classList.toggle('is-active',active);row.classList.toggle('is-dim',!active)})}}
+function setSlide(i,stateMode='start'){if(i<0||i>=total)return;slides[cur].classList.remove('active');cur=i;const slide=slides[cur],steps=+(slide.dataset.steps||0);slide.dataset.state=stateMode==='max'?steps:0;slide.classList.add('active');applySteps(slide);update()}
+function update(){const ch=+slides[cur].dataset.ch,[hex,rgb]=ACCENTS[ch];deck.style.setProperty('--accent',hex);deck.style.setProperty('--accent-rgb',rgb);viewport.style.setProperty('--accent-rgb',rgb);document.getElementById('cur').textContent=String(cur+1).padStart(2,'0');document.getElementById('progress').style.width=((cur+1)/total*100)+'%';navItems.forEach(li=>{const c=+li.dataset.ch;li.classList.toggle('active',c===ch);li.classList.toggle('done',c<ch)})}
+function go(dir){const slide=slides[cur],steps=+(slide.dataset.steps||0);let state=+(slide.dataset.state||0);if(dir>0){if(state<steps){slide.dataset.state=state+1;applySteps(slide);return}setSlide(cur+1)}else{if(state>0){slide.dataset.state=state-1;applySteps(slide);return}setSlide(cur-1,'max')}}
+document.addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(1)}else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1)}else if(e.key==='Home'){setSlide(0)}else if(e.key==='End'){setSlide(total-1)}});
+function fit(){deck.style.transform=`scale(${Math.min(window.innerWidth/1280,window.innerHeight/720)})`}
+window.addEventListener('resize',fit);slides[0].classList.add('active');applySteps(slides[0]);fit();update();window.__setSlide=i=>setSlide(i);window.__setSlideMax=i=>setSlide(i,'max');window.__slideCount=total;
+</script>
+</body>
+</html>
