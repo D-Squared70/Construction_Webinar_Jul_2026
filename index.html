@@ -35,7 +35,7 @@ h1{font-family:var(--serif);font-size:76px;font-weight:500;line-height:.98;lette
 h2.title{font-family:var(--serif);font-size:56px;font-weight:500;line-height:1.04;letter-spacing:-.015em}.lead{font-size:21px;line-height:1.5;color:var(--ink-2);max-width:760px}.accent{color:var(--accent)}
 
 /* demo opener */
-.demo-slide{padding:0;align-items:center;justify-content:center;text-align:center}.demo-logo{width:330px;height:338px;object-fit:contain;filter:drop-shadow(0 22px 42px rgba(116,170,156,.20))}.demo-word{margin-top:24px;font-family:var(--serif);font-size:62px;font-weight:500;letter-spacing:-.015em}.deck.demo-mode .chapnav,.deck.demo-mode .counter,.deck.demo-mode .progress{opacity:0;pointer-events:none}.chapnav,.counter,.progress{transition:opacity .3s ease}
+.demo-slide{padding:76px 86px;display:grid;grid-template-columns:390px 1fr;gap:78px;align-items:center;justify-content:stretch;text-align:left}.demo-identity{text-align:center}.demo-logo{width:300px;height:307px;object-fit:contain;filter:drop-shadow(0 22px 42px rgba(116,170,156,.20))}.demo-word{margin-top:18px;font-family:var(--serif);font-size:58px;font-weight:500;letter-spacing:-.015em}.demo-agenda{min-width:0}.demo-agenda-row{display:grid;grid-template-columns:44px 1fr;align-items:center;min-height:56px;border-top:1px solid var(--rule)}.demo-agenda-row:last-child{border-bottom:1px solid var(--rule)}.demo-num{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#74AA9C}.demo-topic{font-size:20px;font-weight:500;color:var(--ink-2)}.demo-topic b{color:var(--ink);font-weight:600}.deck.demo-mode .chapnav,.deck.demo-mode .counter,.deck.demo-mode .progress{opacity:0;pointer-events:none}.chapnav,.counter,.progress{transition:opacity .3s ease}
 
 /* opener */
 .opening{display:grid;grid-template-columns:330px 1fr;gap:48px;align-items:center;margin-top:36px}.email-card{height:230px;border:1px solid var(--rule);border-radius:18px;background:var(--bg-soft);display:grid;place-items:center;position:relative}.email-card:after{content:'EMAIL CLEANUP';position:absolute;bottom:20px;font-family:var(--mono);font-size:11px;letter-spacing:.17em;color:var(--ink-4)}.email-card svg{width:92px;height:92px;fill:none;stroke:var(--ink-3);stroke-width:1.6}
@@ -73,8 +73,19 @@ h2.title{font-family:var(--serif);font-size:56px;font-weight:500;line-height:1.0
     <div class="progress"><span id="progress"></span></div>
 
     <section class="slide demo-slide" data-ch="1">
-      <img src="chatgpt.png" alt="ChatGPT" class="demo-logo">
-      <div class="demo-word">Demo</div>
+      <div class="demo-identity">
+        <img src="chatgpt.png" alt="ChatGPT" class="demo-logo">
+        <div class="demo-word">Demo</div>
+      </div>
+      <div class="demo-agenda" aria-label="UI walkthrough topics">
+        <div class="demo-agenda-row"><span class="demo-num">01</span><span class="demo-topic"><b>Chat</b> vs. Work</span></div>
+        <div class="demo-agenda-row"><span class="demo-num">02</span><span class="demo-topic"><b>Browser</b> vs. Desktop</span></div>
+        <div class="demo-agenda-row"><span class="demo-num">03</span><span class="demo-topic"><b>Models</b> vs. Reasoning Effort</span></div>
+        <div class="demo-agenda-row"><span class="demo-num">04</span><span class="demo-topic">Permissions</span></div>
+        <div class="demo-agenda-row"><span class="demo-num">05</span><span class="demo-topic">Dictation</span></div>
+        <div class="demo-agenda-row"><span class="demo-num">06</span><span class="demo-topic">Find + add a folder</span></div>
+        <div class="demo-agenda-row"><span class="demo-num">07</span><span class="demo-topic">In-app browser <b>preview</b></span></div>
+      </div>
     </section>
 
     <section class="slide" data-ch="2" data-mode="spot" data-steps="2">
