@@ -34,6 +34,9 @@ body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased
 h1{font-family:var(--serif);font-size:76px;font-weight:500;line-height:.98;letter-spacing:-.022em}h1 em,h2 em{font-style:italic;color:var(--accent)}
 h2.title{font-family:var(--serif);font-size:56px;font-weight:500;line-height:1.04;letter-spacing:-.015em}.lead{font-size:21px;line-height:1.5;color:var(--ink-2);max-width:760px}.accent{color:var(--accent)}
 
+/* demo opener */
+.demo-slide{padding:0;align-items:center;justify-content:center;text-align:center}.demo-logo{width:330px;height:338px;object-fit:contain;filter:drop-shadow(0 22px 42px rgba(116,170,156,.20))}.demo-word{margin-top:24px;font-family:var(--serif);font-size:62px;font-weight:500;letter-spacing:-.015em}.deck.demo-mode .chapnav,.deck.demo-mode .counter,.deck.demo-mode .progress{opacity:0;pointer-events:none}.chapnav,.counter,.progress{transition:opacity .3s ease}
+
 /* opener */
 .opening{display:grid;grid-template-columns:330px 1fr;gap:48px;align-items:center;margin-top:36px}.email-card{height:230px;border:1px solid var(--rule);border-radius:18px;background:var(--bg-soft);display:grid;place-items:center;position:relative}.email-card:after{content:'EMAIL CLEANUP';position:absolute;bottom:20px;font-family:var(--mono);font-size:11px;letter-spacing:.17em;color:var(--ink-4)}.email-card svg{width:92px;height:92px;fill:none;stroke:var(--ink-3);stroke-width:1.6}
 .open-arrow{position:absolute;left:608px;width:72px;height:22px}.workflow{height:230px;border:1px solid var(--accent);border-radius:18px;background:rgba(var(--accent-rgb),.05);display:flex;align-items:center;justify-content:center;gap:26px;box-shadow:0 0 42px rgba(var(--accent-rgb),.08)}.wf-node{width:112px;text-align:center}.wf-icon{width:78px;height:78px;margin:auto;border:1px solid rgba(var(--accent-rgb),.42);border-radius:50%;display:grid;place-items:center;background:rgba(var(--accent-rgb),.05)}.wf-icon svg{width:38px;height:38px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.wf-label{margin-top:13px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}.wf-link{width:42px;height:1px;background:var(--accent);opacity:.6}
@@ -69,29 +72,9 @@ h2.title{font-family:var(--serif);font-size:56px;font-weight:500;line-height:1.0
     <nav class="chapnav" aria-label="Sections"><ol id="navlist"></ol></nav>
     <div class="progress"><span id="progress"></span></div>
 
-    <section class="slide" data-ch="1">
-      <h2 class="title">Better output starts<br>before you hit <em>send.</em></h2>
-      <div class="mistakes">
-        <div class="mistake"><div class="mn">01</div><div class="mword">Model</div><div class="mwrong"><span class="bad-choice">Default model</span><span class="mright">Right model for the job</span></div></div>
-        <div class="mistake"><div class="mn">02</div><div class="mword">Prompt</div><div class="mwrong"><span class="bad-choice">Vague request</span><span class="mright">What · Why · How</span></div></div>
-        <div class="mistake"><div class="mn">03</div><div class="mword">Input</div><div class="mwrong"><span class="bad-choice">Typing</span><span class="mright">Dictating context</span></div></div>
-      </div>
-    </section>
-
-    <section class="slide" data-ch="1">
-      <h2 class="title">Talk first. <em>Type second.</em></h2>
-      <div class="dictation">
-        <div class="dict-col">
-          <div class="dict-tag">What you'd type</div>
-          <div class="typed-line">“Draft an RFI about the ceiling conflict.”</div>
-        </div>
-        <div class="dict-col spoken">
-          <div class="dict-tag">What you'd say</div>
-          <div class="mic"><svg viewBox="0 0 48 48"><rect x="18" y="6" width="12" height="23" rx="6"/><path d="M11 24a13 13 0 0 0 26 0M24 37v6M17 43h14"/></svg></div>
-          <div class="speech">“Draft an RFI about the ceiling conflict…”</div>
-          <div class="frags"><span class="frag">…level three</span><span class="frag">…MEP drawing M-204</span><span class="frag">…schedule at risk</span><span class="frag">…need an answer Friday</span></div>
-        </div>
-      </div>
+    <section class="slide demo-slide" data-ch="1">
+      <img src="chatgpt.png" alt="ChatGPT" class="demo-logo">
+      <div class="demo-word">Demo</div>
     </section>
 
     <section class="slide" data-ch="2" data-mode="spot" data-steps="2">
@@ -127,8 +110,8 @@ h2.title{font-family:var(--serif);font-size:56px;font-weight:500;line-height:1.0
   </div>
 </div>
 <script>
-const ACCENTS={1:['#E9A23B','233,162,59'],2:['#A88CFF','168,140,255'],3:['#7FCB6B','127,203,107']};
-const CH_NAMES={1:'Better inputs',2:'Better prompts',3:'Knowledge transfer'};
+const ACCENTS={1:['#74AA9C','116,170,156'],2:['#A88CFF','168,140,255'],3:['#7FCB6B','127,203,107']};
+const CH_NAMES={1:'Demo',2:'Better prompts',3:'Knowledge transfer'};
 const slides=[...document.querySelectorAll('.slide')],total=slides.length,deck=document.getElementById('deck'),viewport=document.getElementById('viewport');
 document.getElementById('tot').textContent=String(total).padStart(2,'0');
 const navlist=document.getElementById('navlist'),first={};slides.forEach((s,i)=>{const c=+s.dataset.ch;if(first[c]===undefined)first[c]=i});
@@ -136,7 +119,7 @@ Object.keys(CH_NAMES).forEach(k=>{const li=document.createElement('li');li.datas
 const navItems=[...navlist.children];let cur=0;
 function applySteps(slide){const state=+(slide.dataset.state||0);if(slide.dataset.mode==='spot'){slide.querySelectorAll('.wwh-row').forEach(row=>{const active=+row.dataset.i===state;row.classList.toggle('is-active',active);row.classList.toggle('is-dim',!active)})}}
 function setSlide(i,stateMode='start'){if(i<0||i>=total)return;slides[cur].classList.remove('active');cur=i;const slide=slides[cur],steps=+(slide.dataset.steps||0);slide.dataset.state=stateMode==='max'?steps:0;slide.classList.add('active');applySteps(slide);update()}
-function update(){const ch=+slides[cur].dataset.ch,[hex,rgb]=ACCENTS[ch];deck.style.setProperty('--accent',hex);deck.style.setProperty('--accent-rgb',rgb);viewport.style.setProperty('--accent-rgb',rgb);document.getElementById('cur').textContent=String(cur+1).padStart(2,'0');document.getElementById('progress').style.width=((cur+1)/total*100)+'%';navItems.forEach(li=>{const c=+li.dataset.ch;li.classList.toggle('active',c===ch);li.classList.toggle('done',c<ch)})}
+function update(){const ch=+slides[cur].dataset.ch,[hex,rgb]=ACCENTS[ch];deck.style.setProperty('--accent',hex);deck.style.setProperty('--accent-rgb',rgb);viewport.style.setProperty('--accent-rgb',rgb);deck.classList.toggle('demo-mode',slides[cur].classList.contains('demo-slide'));document.getElementById('cur').textContent=String(cur+1).padStart(2,'0');document.getElementById('progress').style.width=((cur+1)/total*100)+'%';navItems.forEach(li=>{const c=+li.dataset.ch;li.classList.toggle('active',c===ch);li.classList.toggle('done',c<ch)})}
 function go(dir){const slide=slides[cur],steps=+(slide.dataset.steps||0);let state=+(slide.dataset.state||0);if(dir>0){if(state<steps){slide.dataset.state=state+1;applySteps(slide);return}setSlide(cur+1)}else{if(state>0){slide.dataset.state=state-1;applySteps(slide);return}setSlide(cur-1,'max')}}
 document.addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(1)}else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1)}else if(e.key==='Home'){setSlide(0)}else if(e.key==='End'){setSlide(total-1)}});
 function fit(){deck.style.transform=`scale(${Math.min(window.innerWidth/1280,window.innerHeight/720)})`}
